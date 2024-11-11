@@ -23,13 +23,13 @@ public class ProdutosDAO {
             
             
             String sql = "INSERT INTO produtos(nome,valor,status) VALUES (?, ?, ?)";
-            PreparedStatement query = this.conn.prepareStatement(sql);
+            prep = this.conn.prepareStatement(sql);
             
-            query.setString(1, produto.getNome());
-            query.setDouble(2, produto.getValor());
-            query.setString(3, produto.getStatus());  
+            prep.setString(1, produto.getNome());
+            prep.setDouble(2, produto.getValor());
+            prep.setString(3, produto.getStatus());  
             
-            query.execute();
+            prep.execute();
             
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso! ");
            
@@ -43,11 +43,41 @@ public class ProdutosDAO {
     
     public ArrayList<ProdutosDTO> listarProdutos(){
         
-        return listagem;
+        
+        try {
+            
+            String sql = "SELECT * FROM produtos";
+        
+            conn = new conectaDAO().connectDB();
+            
+                    prep = this.conn.prepareStatement(sql);                                   
+                    
+                    ResultSet rs = prep.executeQuery();        
+                   
+                    while (rs.next()) {
+                        ProdutosDTO produtos = new ProdutosDTO();
+                                                
+                      produtos.setId(rs.getInt("id"));
+                      produtos.setNome(rs.getString("nome"));
+                      produtos.setValor(rs.getDouble("valor"));
+                      produtos.setStatus(rs.getString("status"));                                       
+                      
+                        
+                        listagem.add(produtos);
+                    }
+                    return listagem;
+                    
+                    //Se o método entrar no "Catch" quer dizer que não encontrou nenhuma filme, então retornará null
+                }     
+        catch (SQLException e) {
+                    return null;
+                }
+        
+       
     }
     
     
-    
+     
         
 }
 
