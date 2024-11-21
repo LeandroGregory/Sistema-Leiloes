@@ -1,4 +1,4 @@
-
+    
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -41,9 +41,28 @@ public class ProdutosDAO {
           
     }
     
+    public void venderProduto (ProdutosDTO produto){        
+                
+        try{           
+            String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+            
+            conn = new conectaDAO().connectDB();
+            prep = this.conn.prepareStatement(sql);
+            
+            prep.setInt(1, produto.getId());
+           
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Erro na atualização do produto");
+        }
+        
+        
+        
+    }
+    
     public ArrayList<ProdutosDTO> listarProdutos(){
         
-        
+            
         try {
             
             String sql = "SELECT * FROM produtos";
